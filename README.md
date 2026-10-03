@@ -72,38 +72,3 @@ KawanUsaha/
    ```bash
    git clone https://github.com/Kharisdestianmaulana-hub/KawabUsaha.git
    cd KawabUsaha
-   ```
-
-2. **Buat Virtual Environment & Install Library**
-   ```bash
-   python -m venv venv
-   source venv/bin/activate
-   pip install -r requirements.txt
-   ```
-
-3. **Atur Token Bot**
-   * Buat file bernama `.env` di folder utama.
-   * Dapatkan token bot dari [@BotFather](https://t.me/BotFather) di Telegram.
-   * Masukkan ke dalam `.env` seperti ini:
-     ```env
-     BOT_TOKEN=123456789:ABCDefghIJKLmnopQRSTuvwxyz
-     ```
-
-4. **Nyalakan Mesin**
-   ```bash
-   python main.py
-   ```
-   *Bot kini siap digunakan! Buka Telegram dan ketik `/start` di chat bot-mu.*
-
----
-
-## 🎨 Mengaktifkan Website (GitHub Pages)
-
-Karena proyek ini sudah dilengkapi folder `docs/`, kamu bisa menyalakan website gratis dari GitHub:
-1. Masuk ke tab **Settings** di Repositori GitHub kamu.
-2. Pilih menu **Pages** di sebelah kiri.
-3. Pada opsi *Build and deployment*, pilih branch **`main`** dan ubah folder dari `/ (root)` menjadi **`/docs`**.
-4. Klik **Save** dan tunggu 1 menit. Website-mu kini sudah *live*!
-
----
-*Dibuat dengan ❤️ untuk memajukan UMKM Indonesia.*
