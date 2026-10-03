@@ -1,14 +1,15 @@
 import logging
-from datetime import time
+import asyncio
+from apscheduler.schedulers.asyncio import AsyncIOScheduler
+from apscheduler.triggers.cron import CronTrigger
 import pytz
-from telegram.ext import ContextTypes
 from app.database.connection import get_db_connection
 from app.utils.reports import get_report_text
 
 logger = logging.getLogger(__name__)
 
-async def send_daily_report_job(context: ContextTypes.DEFAULT_TYPE):
-    """Job yang berjalan otomatis untuk mengirim laporan harian ke seluruh pemilik usaha."""
+async def execute_daily_report(bot):
+    """Fungsi mandiri untuk mengirim laporan harian ke seluruh pemilik usaha."""
     logger.info("Mulai mengeksekusi Auto-Kirim Laporan Harian...")
     with get_db_connection() as conn:
         cursor = conn.cursor()
@@ -25,22 +26,22 @@ async def send_daily_report_job(context: ContextTypes.DEFAULT_TYPE):
         message = f"🔔 *AUTO-KIRIM LAPORAN HARIAN*\n\n{text}"
         
         try:
-            await context.bot.send_message(chat_id=user_id, text=message, parse_mode='Markdown')
+            await bot.send_message(chat_id=user_id, text=message, parse_mode='Markdown')
             logger.info(f"Berhasil mengirim laporan otomatis ke {user_id}")
         except Exception as e:
             logger.error(f"Gagal mengirim laporan otomatis ke {user_id}: {e}")
 
-def setup_jobs(job_queue):
-    """Mendaftarkan jadwal cron job pada bot."""
-    if job_queue is None:
-        logger.warning("Job Queue tidak aktif! Auto-kirim laporan gagal di-setup.")
-        return
-        
-    # Zona waktu Jakarta
+def start_background_scheduler(bot):
+    """Menjalankan background scheduler mandiri tanpa PTB JobQueue."""
     tz = pytz.timezone('Asia/Jakarta')
+    scheduler = AsyncIOScheduler(timezone=tz)
     
-    # Jadwalkan jam 21:00 WIB
-    t = time(hour=21, minute=0, tzinfo=tz)
+    # Jadwalkan setiap hari jam 21:00 WIB
+    trigger = CronTrigger(hour=21, minute=0, timezone=tz)
     
-    job_queue.run_daily(send_daily_report_job, t)
-    logger.info("Berhasil mendaftarkan Job Auto-Kirim Laporan Harian (Setiap 21:00 WIB).")
+    # Bungkus eksekusi bot ke dalam lambda atau pass args
+    scheduler.add_job(execute_daily_report, trigger, args=[bot])
+    
+    scheduler.start()
+    logger.info("Berhasil mendaftarkan Job Auto-Kirim Laporan Harian (Setiap 21:00 WIB) via Native APScheduler.")
+

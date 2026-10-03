@@ -37,10 +37,13 @@ def get_application():
     run_migrations()
     logger.info("✅ Database berhasil diinisialisasi.")
     
-    application = Application.builder().token(BOT_TOKEN).build()
-
-    from app.jobs import setup_jobs
-    setup_jobs(application.job_queue)
+    from app.jobs import start_background_scheduler
+    
+    async def post_init(app: Application):
+        start_background_scheduler(app.bot)
+    
+    # Nonaktifkan PTB JobQueue bawaan (karena bug weakref di Python 3.14)
+    application = Application.builder().token(BOT_TOKEN).job_queue(None).post_init(post_init).build()
 
     application.add_handler(get_onboarding_handler())
     application.add_handler(get_product_conversation())
