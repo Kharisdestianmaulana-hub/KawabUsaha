@@ -37,14 +37,8 @@ def get_application():
     run_migrations()
     logger.info("✅ Database berhasil diinisialisasi.")
     
-    # Deteksi jika berjalan di PythonAnywhere (Free Tier butuh proxy ini)
-    import os
-    if os.environ.get('PYTHONANYWHERE_SITE'):
-        logger.info("🔧 Menjalankan mode PythonAnywhere (menggunakan proxy otomatis).")
-        application = Application.builder().token(BOT_TOKEN).proxy_url('http://proxy.server:3128').build()
-    else:
-        application = Application.builder().token(BOT_TOKEN).build()
-        
+    application = Application.builder().token(BOT_TOKEN).build()
+
     application.add_handler(get_onboarding_handler())
     application.add_handler(get_product_conversation())
     application.add_handler(get_edit_product_conversation())
