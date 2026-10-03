@@ -1,30 +1,24 @@
+import sys
+import os
 import asyncio
-import threading
 from flask import Flask, request
 from telegram import Update
 from app.bot import get_application
 from app.config import BOT_TOKEN
 
+# Paksa deteksi PythonAnywhere agar proxy aktif
+os.environ['PYTHONANYWHERE_SITE'] = 'true'
+os.environ['http_proxy'] = 'http://proxy.server:3128'
+os.environ['https_proxy'] = 'http://proxy.server:3128'
+
 app = Flask(__name__)
 ptb_app = get_application()
 
-# 1. Buat event loop di background agar library asinkron Telegram berjalan stabil
-worker_loop = asyncio.new_event_loop()
-
-def run_loop(loop):
-    asyncio.set_event_loop(loop)
-    loop.run_forever()
-
-thread = threading.Thread(target=run_loop, args=(worker_loop,), daemon=True)
-thread.start()
-
-# 2. Inisialisasi bot (Wajib dilakukan di PTB v20+)
-async def init_bot():
-    await ptb_app.initialize()
-    await ptb_app.start()
-
-# Jalankan inisialisasi di background loop
-asyncio.run_coroutine_threadsafe(init_bot(), worker_loop).result()
+# Inisialisasi loop sinkron (tanpa background thread untuk menghindari suspended thread di uWSGI)
+loop = asyncio.new_event_loop()
+asyncio.set_event_loop(loop)
+loop.run_until_complete(ptb_app.initialize())
+loop.run_until_complete(ptb_app.start())
 
 @app.route('/', methods=['GET'])
 def index():
@@ -36,8 +30,9 @@ def webhook():
         update_data = request.get_json(force=True)
         update = Update.de_json(update_data, ptb_app.bot)
         
-        # Lempar update ke background loop agar diproses
-        future = asyncio.run_coroutine_threadsafe(ptb_app.process_update(update), worker_loop)
-        future.result() # Tunggu sampai selesai diproses
+        # Eksekusi secara aman di dalam satu thread yang sama
+        # Memastikan tidak ada thread block atau proxy timeout
+        loop.run_until_complete(ptb_app.process_update(update))
         
         return "OK", 200
+
