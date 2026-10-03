@@ -39,6 +39,9 @@ def get_application():
     
     application = Application.builder().token(BOT_TOKEN).build()
 
+    from app.jobs import setup_jobs
+    setup_jobs(application.job_queue)
+
     application.add_handler(get_onboarding_handler())
     application.add_handler(get_product_conversation())
     application.add_handler(get_edit_product_conversation())
