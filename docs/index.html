@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KawanUsaha - Aplikasi Kasir Telegram untuk UMKM</title>
+    <!-- Tailwind CSS (CDN untuk setup cepat tanpa build process) -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons (Asli, bukan emoji) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#10B981', /* Emerald 500 */
+                        brandDark: '#059669', /* Emerald 600 */
+                        dark: '#1E293B', /* Slate 800 */
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-white text-dark antialiased">
+    
+    <!-- Navigasi Utama -->
+    <nav class="w-full bg-white py-5 px-6 md:px-12 flex justify-between items-center">
+        <div class="font-bold text-2xl tracking-tight text-brandDark">
+            <i class="fa-solid fa-store mr-2"></i>KawanUsaha
+        </div>
+        <a href="https://t.me/kawanusaha_bot" target="_blank" class="hidden md:inline-block bg-brandDark hover:bg-brand text-white px-5 py-2.5 font-semibold rounded transition duration-200">
+            Buka di Telegram
+        </a>
+    </nav>
+
+    <!-- Area Hero (Utama) -->
+    <header class="bg-slate-50 pt-20 pb-28 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-6xl font-extrabold leading-tight mb-6">
+                Aplikasi Kasir UMKM Paling Praktis. <span class="text-brandDark">Langsung dari Telegram-mu.</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-500 mb-10 max-w-2xl mx-auto">
+                Kelola stok, catat kasbon, dan pantau laba bersih harian tanpa perlu <i>install</i> aplikasi berat yang membuat memori HP penuh.
+            </p>
+            <a href="https://t.me/kawanusaha_bot" target="_blank" class="inline-flex items-center justify-center bg-brandDark hover:bg-brand text-white text-lg font-bold py-4 px-8 rounded transition duration-200">
+                <i class="fa-brands fa-telegram text-2xl mr-3"></i> Mulai Sekarang Gratis
+            </a>
+            <p class="mt-4 text-sm text-slate-400">Tanpa registrasi ribet. Klik dan langsung jualan.</p>
+        </div>
+    </header>
+
+    <!-- Area Fitur (Grid) -->
+    <section class="py-20 px-6 md:px-12 bg-white">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold mb-4">Fitur Lengkap untuk Bisnis Maju</h2>
+                <p class="text-slate-500">Semua yang kamu butuhkan untuk pencatatan rapi, terangkum dalam satu chat.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <!-- Fitur 1 -->
+                <div class="bg-slate-50 p-8 rounded text-center hover:bg-brand hover:text-white transition duration-300 group cursor-default">
+                    <div class="w-16 h-16 bg-white text-brandDark group-hover:text-brand rounded-full flex items-center justify-center mx-auto mb-6 text-2xl transition duration-300">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-3">Kasir & Stok</h3>
+                    <p class="text-sm text-slate-500 group-hover:text-emerald-50 transition duration-300">Catat penjualan dengan cepat, atur diskon nominal, dan stok di gudang akan terpotong otomatis.</p>
+                </div>
+
+                <!-- Fitur 2 -->
+                <div class="bg-slate-50 p-8 rounded text-center hover:bg-brand hover:text-white transition duration-300 group cursor-default">
+                    <div class="w-16 h-16 bg-white text-brandDark group-hover:text-brand rounded-full flex items-center justify-center mx-auto mb-6 text-2xl transition duration-300">
+                        <i class="fa-solid fa-book-journal-whills"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-3">Buku Kasbon</h3>
+                    <p class="text-sm text-slate-500 group-hover:text-emerald-50 transition duration-300">Catat hutang pelanggan tanpa repot. Terima pelunasan dan laporan omzet akan menyesuaikan.</p>
+                </div>
+
+                <!-- Fitur 3 -->
+                <div class="bg-slate-50 p-8 rounded text-center hover:bg-brand hover:text-white transition duration-300 group cursor-default">
+                    <div class="w-16 h-16 bg-white text-brandDark group-hover:text-brand rounded-full flex items-center justify-center mx-auto mb-6 text-2xl transition duration-300">
+                        <i class="fa-solid fa-file-pdf"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-3">Cetak Struk PDF</h3>
+                    <p class="text-sm text-slate-500 group-hover:text-emerald-50 transition duration-300">Setiap transaksi selesai, bot akan meracik struk PDF resmi yang siap dibagikan ke pembeli via WhatsApp/Telegram.</p>
+                </div>
+
+                <!-- Fitur 4 -->
+                <div class="bg-slate-50 p-8 rounded text-center hover:bg-brand hover:text-white transition duration-300 group cursor-default">
+                    <div class="w-16 h-16 bg-white text-brandDark group-hover:text-brand rounded-full flex items-center justify-center mx-auto mb-6 text-2xl transition duration-300">
+                        <i class="fa-solid fa-chart-line"></i>
+                    </div>
+                    <h3 class="font-bold text-xl mb-3">Laba Bersih</h3>
+                    <p class="text-sm text-slate-500 group-hover:text-emerald-50 transition duration-300">Pantau laporan harian secara detail. Omzet dikurangi pengeluaran dihitung dengan akurat.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Area Call to Action (Cara Kerja) -->
+    <section class="bg-brandDark text-white py-20 px-6 text-center">
+        <div class="max-w-4xl mx-auto">
+            <h2 class="text-3xl font-bold mb-14">Hanya Butuh 3 Langkah Pendek</h2>
+            <div class="flex flex-col md:flex-row justify-center items-center gap-8 md:gap-12 mb-14">
+                <div class="flex-1">
+                    <div class="w-14 h-14 bg-white text-brandDark font-extrabold rounded-full flex items-center justify-center mx-auto mb-5 text-xl">1</div>
+                    <h4 class="font-bold text-lg">Buka Bot</h4>
+                    <p class="text-sm text-emerald-100 mt-2">Cari @kawanusaha_bot di Telegram atau klik link di web ini.</p>
+                </div>
+                <div class="hidden md:block text-2xl text-emerald-400"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flex-1">
+                    <div class="w-14 h-14 bg-white text-brandDark font-extrabold rounded-full flex items-center justify-center mx-auto mb-5 text-xl">2</div>
+                    <h4 class="font-bold text-lg">Ketik /start</h4>
+                    <p class="text-sm text-emerald-100 mt-2">Daftarkan profil toko tanpa perlu membuat password sama sekali.</p>
+                </div>
+                <div class="hidden md:block text-2xl text-emerald-400"><i class="fa-solid fa-arrow-right"></i></div>
+                <div class="flex-1">
+                    <div class="w-14 h-14 bg-white text-brandDark font-extrabold rounded-full flex items-center justify-center mx-auto mb-5 text-xl">3</div>
+                    <h4 class="font-bold text-lg">Mulai Jualan</h4>
+                    <p class="text-sm text-emerald-100 mt-2">Tambahkan produk pertama ke gudang, dan buat nota penjualan!</p>
+                </div>
+            </div>
+            
+            <a href="https://t.me/kawanusaha_bot" target="_blank" class="inline-flex items-center justify-center bg-white text-brandDark hover:bg-slate-50 text-lg font-bold py-3 px-10 rounded transition duration-200">
+                Coba KawanUsaha Sekarang
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-slate-400 py-8 text-center text-sm">
+        <p>&copy; 2026 KawanUsaha. Dibuat dengan 💚 untuk memajukan UMKM Indonesia.</p>
+    </footer>
+
+</body>
+</html>
