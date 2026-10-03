@@ -1,18 +1,30 @@
 import asyncio
-from flask import Flask, request, jsonify
+import threading
+from flask import Flask, request
 from telegram import Update
 from app.bot import get_application
 from app.config import BOT_TOKEN
 
-# Inisialisasi Flask (Untuk PythonAnywhere)
 app = Flask(__name__)
-
-# Buat dan Inisialisasi PTB Application
 ptb_app = get_application()
 
-# Kita butuh event loop background untuk menginisialisasi bot secara sinkron
-loop = asyncio.get_event_loop()
-loop.run_until_complete(ptb_app.initialize())
+# 1. Buat event loop di background agar library asinkron Telegram berjalan stabil
+worker_loop = asyncio.new_event_loop()
+
+def run_loop(loop):
+    asyncio.set_event_loop(loop)
+    loop.run_forever()
+
+thread = threading.Thread(target=run_loop, args=(worker_loop,), daemon=True)
+thread.start()
+
+# 2. Inisialisasi bot (Wajib dilakukan di PTB v20+)
+async def init_bot():
+    await ptb_app.initialize()
+    await ptb_app.start()
+
+# Jalankan inisialisasi di background loop
+asyncio.run_coroutine_threadsafe(init_bot(), worker_loop).result()
 
 @app.route('/', methods=['GET'])
 def index():
@@ -20,18 +32,12 @@ def index():
 
 @app.route(f'/{BOT_TOKEN}', methods=['POST'])
 def webhook():
-    """Endpoint untuk menerima kiriman data dari Telegram"""
     if request.method == "POST":
         update_data = request.get_json(force=True)
         update = Update.de_json(update_data, ptb_app.bot)
         
-        # Eksekusi secara async
-        new_loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(new_loop)
-        new_loop.run_until_complete(ptb_app.process_update(update))
+        # Lempar update ke background loop agar diproses
+        future = asyncio.run_coroutine_threadsafe(ptb_app.process_update(update), worker_loop)
+        future.result() # Tunggu sampai selesai diproses
         
         return "OK", 200
-
-# Untuk menjalankan manual via python flask_app.py
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
