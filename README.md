@@ -1,40 +1,109 @@
-# KawanUsaha - Telegram Bot MVP
+# 🏪 KawanUsaha - Asisten Digital & Kasir UMKM via Telegram
 
-KawanUsaha adalah asisten digital berbasis Telegram Bot yang dirancang khusus untuk membantu pemilik usaha kecil/UMKM melakukan pekerjaan operasional harian secara cepat tanpa perlu membuka aplikasi kasir yang rumit.
+KawanUsaha adalah aplikasi kasir pintar (Point of Sale) dan sistem pembukuan yang beroperasi **100% di dalam Telegram Bot**. Dirancang khusus untuk warung, toko kelontong, dan UMKM di Indonesia agar bisa mengelola bisnis tanpa perlu menginstal aplikasi berat yang menguras memori HP.
 
-## 🚀 Fitur Utama (MVP)
-1. **Onboarding & Profil Bisnis**: Pendaftaran otomatis dengan command `/start`.
-2. **Manajemen Produk (CRUD)**: Tambah, edit harga, hapus, dan lihat daftar produk.
-3. **Manajemen Stok**: Stok masuk, stok keluar, beserta riwayat transaksi pergerakan stok.
-4. **Peringatan Stok Menipis**: Notifikasi otomatis saat stok menipis (≤ 5 pcs) saat transaksi.
-5. **Kasir / Penjualan**: Pencatatan omzet yang terintegrasi langsung dengan pengurangan stok.
-6. **Laporan Usaha**: Rangkuman transaksi hari ini, 7 hari terakhir, dan bulan berjalan, lengkap dengan Total Omzet & Top 3 Produk Terlaris.
-7. **Buku Pelanggan (CRM)**: Menyimpan nama dan nomor WhatsApp pelanggan beserta riwayat belanjanya.
-8. **Cetak Invoice PDF**: Pembuatan struk format PDF secara instan dari Telegram.
+🌐 **Website Resmi / Landing Page**: [Akses di sini](https://Kharisdestianmaulana-hub.github.io/KawabUsaha) (Jika GitHub Pages sudah diaktifkan)
 
-## 🛠 Teknologi yang Digunakan
-- **Python 3.14**
-- **python-telegram-bot** (v21+)
-- **SQLite3** (Database lokal tanpa setup server)
-- **ReportLab** (Untuk merender file PDF)
+---
 
-## 📦 Cara Menjalankan secara Lokal
-1. Pastikan Anda memiliki Token Bot Telegram (dapatkan dari [@BotFather](https://t.me/botfather)).
-2. Buat file `.env` dan masukkan token Anda:
-   ```env
-   BOT_TOKEN=123456789:YOUR_BOT_TOKEN_HERE
+## ✨ Fitur Unggulan
+
+KawanUsaha versi terbaru telah dilengkapi dengan modul skala *Enterprise* yang disederhanakan untuk kelas warung:
+
+*   🛒 **Kasir Pintar Terintegrasi**
+    *   Sistem keranjang belanja multi-item.
+    *   Fitur **Diskon Transaksi** (Nominal Rupiah).
+    *   Pemilihan **Metode Pembayaran** (Tunai, BCA, QRIS, dsb).
+    *   Stok otomatis terpotong saat transaksi selesai.
+*   📓 **Buku Kasbon (Piutang)**
+    *   Catat pelanggan yang berhutang dengan cepat tanpa memotong stok.
+    *   Terima uang pelunasan yang otomatis masuk ke hitungan **Omzet Hari Ini**.
+    *   Pantau riwayat cicilan kasbon per pelanggan.
+*   🧾 **Struk PDF Otomatis**
+    *   Nota cetak digital (PDF) lengkap dengan rincian diskon, metode bayar, dan nama kasir yang bertugas.
+*   📊 **Laporan & Laba Bersih**
+    *   Sistem akuntansi otomatis: **Total Omzet – Total Pengeluaran = Laba Bersih**.
+    *   Rincian uang masuk berdasarkan bank (Berapa tunai di laci, berapa saldo di rekening).
+    *   Daftar produk terlaris harian/bulanan.
+*   👥 **Multi-Kasir (Role-Based Access)**
+    *   **Bos (Owner)** memiliki kendali penuh (Laporan, Pengeluaran, Reset Data).
+    *   Bos dapat men-generate **Kode Undangan** rahasia untuk pegawai.
+    *   **Pegawai (Kasir)** hanya bisa mengakses menu Kasir dan Pelanggan.
+*   📦 **Manajemen Inventaris**
+    *   Kelola produk, edit harga/kategori, dan tambah/kurangi stok.
+*   ⚙️ **Pengaturan Tingkat Lanjut**
+    *   Ubah profil toko (Nama, Alamat, No WA).
+    *   Kustomisasi daftar Rekening Bank/E-Wallet.
+    *   **Sapu Bersih (Reset Data)** dengan gembok keamanan 3 lapis.
+
+---
+
+## 🛠 Teknologi (Tech Stack)
+
+*   **Bahasa**: Python 3.10+
+*   **Framework Bot**: `python-telegram-bot` v20+ (Asynchronous)
+*   **Database**: SQLite3 (Ringan, *built-in*, menggunakan relasi *Foreign Key* dan *Cascade*)
+*   **PDF Generator**: ReportLab
+*   **Landing Page**: HTML5, Tailwind CSS (CDN), FontAwesome Icons
+
+---
+
+## 📂 Struktur Direktori
+
+```text
+KawanUsaha/
+├── app/
+│   ├── bot.py                # Entry point handler Telegram
+│   ├── config.py             # Konfigurasi Token
+│   ├── database/             # Logika koneksi & Migrasi SQLite (Pembuatan Tabel)
+│   ├── handlers/             # Modul Fitur (Kasbon, Penjualan, Produk, Laporan, dll)
+│   └── utils/                # Helper (Generator PDF & Autentikasi Role)
+├── docs/                     # Kode Website Statis (Landing Page) untuk GitHub Pages
+├── .env                      # File rahasia berisi BOT_TOKEN
+├── main.py                   # Script utama untuk menjalankan bot
+└── requirements.txt          # Daftar library Python
+```
+
+---
+
+## 🚀 Cara Menjalankan Bot di Komputer/Server
+
+1. **Clone Repositori**
+   ```bash
+   git clone https://github.com/Kharisdestianmaulana-hub/KawabUsaha.git
+   cd KawabUsaha
    ```
-3. Buat _virtual environment_ dan jalankan bot:
+
+2. **Buat Virtual Environment & Install Library**
    ```bash
    python -m venv venv
    source venv/bin/activate
    pip install -r requirements.txt
+   ```
+
+3. **Atur Token Bot**
+   * Buat file bernama `.env` di folder utama.
+   * Dapatkan token bot dari [@BotFather](https://t.me/BotFather) di Telegram.
+   * Masukkan ke dalam `.env` seperti ini:
+     ```env
+     BOT_TOKEN=123456789:ABCDefghIJKLmnopQRSTuvwxyz
+     ```
+
+4. **Nyalakan Mesin**
+   ```bash
    python main.py
    ```
-4. Buka Telegram dan ketik `/start` pada bot Anda.
+   *Bot kini siap digunakan! Buka Telegram dan ketik `/start` di chat bot-mu.*
 
-## 📁 Struktur Direktori
-Sistem KawanUsaha ini sudah menerapkan arsitektur *modular* agar mudah di-*scale* saat nanti sistem dikembangkan menjadi *multi-tenant* untuk ribuan pengguna secara serentak.
-- `/app/database/`: Berisi skema (migrations) dan koneksi SQLite.
-- `/app/handlers/`: Logika routing Telegram (Menu, Produk, Stok, Penjualan, Pelanggan, Laporan, Invoice).
-- `/app/utils/`: Script pendukung seperti `pdf_generator.py`.
+---
+
+## 🎨 Mengaktifkan Website (GitHub Pages)
+
+Karena proyek ini sudah dilengkapi folder `docs/`, kamu bisa menyalakan website gratis dari GitHub:
+1. Masuk ke tab **Settings** di Repositori GitHub kamu.
+2. Pilih menu **Pages** di sebelah kiri.
+3. Pada opsi *Build and deployment*, pilih branch **`main`** dan ubah folder dari `/ (root)` menjadi **`/docs`**.
+4. Klik **Save** dan tunggu 1 menit. Website-mu kini sudah *live*!
+
+---
+*Dibuat dengan ❤️ untuk memajukan UMKM Indonesia.*
